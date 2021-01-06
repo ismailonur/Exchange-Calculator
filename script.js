@@ -1,5 +1,5 @@
 // api url
-const api = "https://api.exchangeratesapi.io";
+const api = "https://api.exchangeratesapi.io/";
 
 //elements
 const el_currency_one = document.getElementById("currency_one");
@@ -21,7 +21,22 @@ fetch('./currencies.json')
             options += `<option value=${keys[i]}>${values[i]}</option>`;
         }
 
+        // Optionsların doldurulması
         el_currency_one.innerHTML += options;
         el_currency_two.innerHTML += options;
     })
 
+// Butona tıklanması    
+el_btn_calculate.addEventListener('click', function () {
+    const base_currency = el_currency_one.value;
+    const to = el_currency_two.value;
+    const amount = el_amount.value;
+
+    //Çevirme işlemlerinin yapılması
+    fetch(`${api}latest?base=${base_currency}`)
+        .then(res => res.json())
+        .then(data => {
+            const rate = data.rates[to];
+            el_result.innerHTML = `${amount} ${base_currency} = ${amount * rate} ${to}`;
+        })
+})
